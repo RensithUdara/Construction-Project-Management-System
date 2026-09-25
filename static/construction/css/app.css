@@ -1329,6 +1329,11 @@ progress::-webkit-progress-value {
     font-weight: 750;
 }
 
+.login-brand .brand-logo {
+    width: 64px;
+    height: 64px;
+}
+
 .login-copy {
     position: relative;
     z-index: 1;
