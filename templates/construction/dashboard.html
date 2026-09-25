@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard | Construction Management{% endblock %}
+{% block heading %}Portfolio Dashboard{% endblock %}
+{% block content %}
+<section class="hero-dashboard">
+    <div>
+        <p class="eyebrow">Live project intelligence</p>
+        <h2>Cost, schedule, procurement, and contract administration in one workspace.</h2>
+        <p>Track the portfolio health, catch overdue actions, and jump into the modules that need attention.</p>
+    </div>
+    <div class="hero-actions">
+        <a class="primary-button" href="{% url 'entity_create' 'projects' %}">New Project</a>
+        <a class="button secondary" href="{% url 'entity_create' 'daily-reports' %}">Daily Report</a>
+        <a class="button secondary" href="{% url 'entity_create' 'rfis' %}">New RFI</a>
+    </div>
+</section>
+
+<section class="metric-grid">
+    <article class="metric"><span>Total Projects</span><strong>{{ total_projects }}</strong><small>Portfolio size</small></article>
+    <article class="metric"><span>Active Projects</span><strong>{{ active_projects }}</strong><small>Currently moving</small></article>
+    <article class="metric"><span>Completed</span><strong>{{ completed_projects }}</strong><small>Final completion</small></article>
+    <article class="metric"><span>Open RFIs</span><strong>{{ open_rfis }}</strong><small>Need response</small></article>
+    <article class="metric"><span>Approvals</span><strong>{{ pending_approvals }}</strong><small>Pending review</small></article>
+    <article class="metric"><span>Defects</span><strong>{{ open_defects }}</strong><small>Open snags</small></article>
+</section>
+
+<section class="analytics-grid">
+    <div class="panel chart-panel wide">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Commercial</p>
+                <h2>Budget vs Actual vs Committed</h2>
+            </div>
+        </div>
+        <canvas id="budgetChart" height="280"></canvas>
+    </div>
+    <div class="panel chart-panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Status</p>
+                <h2>Project Distribution</h2>
+            </div>
+        </div>
+        <canvas id="statusChart" height="280"></canvas>
+    </div>
+    <div class="panel chart-panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Schedule</p>
+                <h2>Progress by Project</h2>
+            </div>
+        </div>
+        <canvas id="progressChart" height="280"></canvas>
+    </div>
+    <div class="panel chart-panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Workflow</p>
+                <h2>Open Workload</h2>
+            </div>
+        </div>
+        <canvas id="workflowChart" height="280"></canvas>
+    </div>
+</section>
+
+<section class="split">
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Portfolio</p>
+                <h2>Projects</h2>
+            </div>
+            <a class="button" href="{% url 'entity_create' 'projects' %}">New Project</a>
+        </div>
+        <div class="project-list">
+            {% for project in recent_projects %}
+                <a class="project-row" href="{{ project.get_absolute_url }}">
+                    <span>
+                        <strong>{{ project.code }}</strong>
+                        <small>{{ project.name }}</small>
+                    </span>
+                    <span class="status-chip">{{ project.get_status_display }}</span>
+                    <span class="progress-pill">{{ project.progress_percent }}%</span>
+                </a>
+            {% empty %}
+                <p class="empty">No projects yet. Create one to start building the portfolio.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Finance</p>
+                <h2>Snapshot</h2>
+            </div>
+        </div>
+        <dl class="finance-list">
+            <div><dt>Total Contract Value</dt><dd>{{ contract_value|floatformat:2 }}</dd></div>
+            <div><dt>Actual Cost</dt><dd>{{ actual_cost|floatformat:2 }}</dd></div>
+            <div><dt>Open Safety Items</dt><dd>{{ safety_open }}</dd></div>
+        </dl>
+    </div>
+</section>
+
+<section class="split">
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Action Needed</p>
+                <h2>Overdue Tasks</h2>
+            </div>
+            <a class="button secondary" href="{% url 'entity_list' 'tasks' %}">View All</a>
+        </div>
+        <div class="stack-list">
+            {% for task in overdue_tasks %}
+                <div class="work-row">
+                    <span><strong>{{ task.title }}</strong><small>{{ task.project.code }} · {{ task.assignee|default:"Unassigned" }}</small></span>
+                    <span class="danger-chip">{{ task.due_date }}</span>
+                </div>
+            {% empty %}
+                <p class="empty">No overdue tasks.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Contract Admin</p>
+                <h2>Overdue RFIs</h2>
+            </div>
+            <a class="button secondary" href="{% url 'entity_list' 'rfis' %}">View All</a>
+        </div>
+        <div class="stack-list">
+            {% for rfi in overdue_rfis %}
+                <div class="work-row">
+                    <span><strong>{{ rfi.rfi_number }}</strong><small>{{ rfi.project.code }} · {{ rfi.subject }}</small></span>
+                    <span class="danger-chip">{{ rfi.due_date }}</span>
+                </div>
+            {% empty %}
+                <p class="empty">No overdue RFIs.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">System Modules</p>
+            <h2>Quick Access</h2>
+        </div>
+    </div>
+    <div class="module-grid">
+        {% for key, module in module_links.items %}
+            <a href="{% url 'entity_list' key %}">
+                <strong>{{ module.title }}</strong>
+                <small>Open records</small>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+{{ dashboard_charts|json_script:"dashboard-chart-data" }}
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'construction/js/dashboard.js' %}"></script>
+{% endblock %}
