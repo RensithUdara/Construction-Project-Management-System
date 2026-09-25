@@ -8,7 +8,9 @@
         <h2>{{ config.title }}</h2>
         <p>Search, review, and maintain {{ config.title|lower }} records from a focused control surface.</p>
     </div>
-    <a class="primary-button" href="{% url 'entity_create' entity %}">Create Record</a>
+    {% if can_create %}
+        <a class="primary-button" href="{% url 'entity_create' entity %}">Create Record</a>
+    {% endif %}
 </section>
 
 <section class="panel list-panel">
@@ -17,7 +19,12 @@
             <input type="search" name="q" value="{{ query }}" placeholder="Search {{ config.title|lower }}">
             <button type="submit">Search</button>
         </form>
-        <span class="result-pill">{{ page.paginator.count }} records</span>
+        <div class="panel-actions">
+            {% if can_export %}
+                <a class="button secondary" href="?q={{ query }}&export=csv">Export CSV</a>
+            {% endif %}
+            <span class="result-pill">{{ page.paginator.count }} records</span>
+        </div>
     </div>
     <div class="table-wrap">
         <table>
@@ -39,7 +46,9 @@
                             {% if entity == 'projects' %}
                                 <a href="{{ row.object.get_absolute_url }}">Open</a>
                             {% endif %}
-                            <a href="{% url 'entity_update' entity row.object.pk %}">Edit</a>
+                            {% if can_edit %}
+                                <a href="{% url 'entity_update' entity row.object.pk %}">Edit</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% empty %}
