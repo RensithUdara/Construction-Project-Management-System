@@ -1596,3 +1596,196 @@ progress::-webkit-progress-value {
         min-width: 640px;
     }
 }
+
+/* Unified dark control-center theme for authenticated pages */
+body:not(.login-page) {
+    color: #eaf4f2;
+    background:
+        linear-gradient(135deg, rgba(23, 114, 100, .78), rgba(26, 63, 84, .78) 44%, rgba(18, 31, 31, .90)),
+        linear-gradient(180deg, #10282e 0%, #17353c 48%, #0e2028 100%);
+}
+
+body:not(.login-page)::before {
+    background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 38px 38px;
+    mask-image: none;
+}
+
+body:not(.login-page)::after {
+    content: "";
+    position: fixed;
+    right: -180px;
+    bottom: -280px;
+    z-index: -1;
+    width: 720px;
+    height: 720px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.035);
+    transform: rotate(12deg);
+    pointer-events: none;
+}
+
+body:not(.login-page) .sidebar {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.035)),
+        rgba(19, 40, 47, .78);
+    border-right: 1px solid rgba(255,255,255,.14);
+    box-shadow: 18px 0 48px rgba(0,0,0,.22);
+    backdrop-filter: blur(18px);
+}
+
+body:not(.login-page) .sidebar nav a {
+    color: rgba(238, 248, 246, .82);
+}
+
+body:not(.login-page) .sidebar nav a:hover {
+    background: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.12);
+}
+
+body:not(.login-page) .main {
+    min-height: 100vh;
+}
+
+body:not(.login-page) .topbar {
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.06)),
+        rgba(19, 40, 47, .46);
+    border-bottom: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 18px 52px rgba(0,0,0,.16);
+}
+
+body:not(.login-page) .topbar h1,
+body:not(.login-page) .hero-dashboard h2,
+body:not(.login-page) .page-hero h2,
+body:not(.login-page) .project-hero h2 {
+    color: #ffffff;
+}
+
+body:not(.login-page) .topbar .eyebrow,
+body:not(.login-page) .hero-dashboard .eyebrow,
+body:not(.login-page) .page-hero .eyebrow,
+body:not(.login-page) .project-hero .eyebrow {
+    color: rgba(255,255,255,.68);
+}
+
+body:not(.login-page) .user-pill {
+    color: #eaf4f2;
+    background: rgba(255,255,255,.10);
+    border-color: rgba(255,255,255,.18);
+}
+
+body:not(.login-page) .hero-dashboard,
+body:not(.login-page) .page-hero,
+body:not(.login-page) .project-hero {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.16);
+    background:
+        linear-gradient(145deg, rgba(23, 114, 100, .70), rgba(19, 40, 47, .90)),
+        linear-gradient(135deg, rgba(61, 111, 182, .14), rgba(209, 154, 42, .16));
+    box-shadow: 0 30px 80px rgba(0,0,0,.24);
+}
+
+body:not(.login-page) .hero-dashboard::after,
+body:not(.login-page) .page-hero::after,
+body:not(.login-page) .project-hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    bottom: -120px;
+    width: 360px;
+    height: 360px;
+    background: rgba(209, 154, 42, .18);
+    transform: rotate(18deg);
+    pointer-events: none;
+}
+
+body:not(.login-page) .hero-dashboard > *,
+body:not(.login-page) .page-hero > *,
+body:not(.login-page) .project-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+body:not(.login-page) .hero-dashboard p:last-child,
+body:not(.login-page) .page-hero p:last-child,
+body:not(.login-page) .project-hero p {
+    color: rgba(255,255,255,.78);
+}
+
+body:not(.login-page) .metric,
+body:not(.login-page) .panel,
+body:not(.login-page) .project-hero dl div,
+body:not(.login-page) .table-wrap,
+body:not(.login-page) .module-grid a,
+body:not(.login-page) .project-row,
+body:not(.login-page) .work-row,
+body:not(.login-page) .mini-row,
+body:not(.login-page) .activity,
+body:not(.login-page) .finance-list div {
+    border-color: rgba(255,255,255,.16);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,250,252,.94)),
+        #ffffff;
+    box-shadow: 0 20px 54px rgba(0,0,0,.15);
+}
+
+body:not(.login-page) .panel h2,
+body:not(.login-page) .metric strong,
+body:not(.login-page) .project-row strong,
+body:not(.login-page) .work-row strong,
+body:not(.login-page) .mini-row strong,
+body:not(.login-page) .module-grid strong,
+body:not(.login-page) .finance-list dd,
+body:not(.login-page) .project-hero dd {
+    color: var(--ink-strong);
+}
+
+body:not(.login-page) .panel .eyebrow,
+body:not(.login-page) .metric span,
+body:not(.login-page) .metric small,
+body:not(.login-page) .project-row small,
+body:not(.login-page) .work-row small,
+body:not(.login-page) .module-grid small,
+body:not(.login-page) .finance-list dt,
+body:not(.login-page) .activity small {
+    color: var(--muted);
+}
+
+body:not(.login-page) .chart-panel canvas {
+    background: linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+body:not(.login-page) table {
+    color: var(--ink);
+}
+
+body:not(.login-page) .record-form label {
+    color: var(--ink-strong);
+}
+
+body:not(.login-page) .secondary,
+body:not(.login-page) .button.secondary {
+    color: #eaf4f2;
+    background: rgba(255,255,255,.10);
+    border-color: rgba(255,255,255,.22);
+}
+
+body:not(.login-page) .panel .secondary,
+body:not(.login-page) .panel .button.secondary,
+body:not(.login-page) .form-panel .secondary,
+body:not(.login-page) .form-panel .button.secondary,
+body:not(.login-page) .project-hero .button.secondary {
+    color: var(--ink);
+    background: #ffffff;
+    border-color: var(--line);
+}
+
+@media (max-width: 1024px) {
+    body:not(.login-page) .sidebar {
+        border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+}
