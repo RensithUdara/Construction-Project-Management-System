@@ -1,0 +1,11 @@
+<div class="panel compact">
+    <h2>{{ title }}</h2>
+    {% for item in items %}
+        <div class="mini-row">
+            <strong>{{ item }}</strong>
+            {% if item.status %}<span>{{ item.get_status_display }}</span>{% endif %}
+        </div>
+    {% empty %}
+        <p class="empty">No records.</p>
+    {% endfor %}
+</div>
