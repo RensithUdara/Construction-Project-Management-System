@@ -38,23 +38,17 @@
             <a href="/api/"><span>API</span></a>
             <a href="/admin/"><span>Admin</span></a>
         </nav>
+        {% if user.is_authenticated %}
+            <div class="sidebar-account">
+                <span class="user-pill">{{ user.get_full_name|default:user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" data-dialog-preset="logout">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        {% endif %}
     </aside>
     <main class="main">
-        <header class="topbar">
-            <div>
-                <p class="eyebrow">Construction Project Management System</p>
-                <h1>{% block heading %}Dashboard{% endblock %}</h1>
-            </div>
-            <div class="user-menu">
-                {% if user.is_authenticated %}
-                    <span class="user-pill">{{ user.get_full_name|default:user.username }}</span>
-                    <form method="post" action="{% url 'logout' %}" data-dialog-preset="logout">
-                        {% csrf_token %}
-                        <button type="submit">Logout</button>
-                    </form>
-                {% endif %}
-            </div>
-        </header>
         {% if messages %}
             <div class="messages popup-message-source">
                 {% for message in messages %}
