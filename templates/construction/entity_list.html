@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ config.title }} | Construction Management{% endblock %}
+{% block heading %}{{ config.title }}{% endblock %}
+{% block content %}
+<section class="page-hero compact-hero">
+    <div>
+        <p class="eyebrow">Module Workspace</p>
+        <h2>{{ config.title }}</h2>
+        <p>Search, review, and maintain {{ config.title|lower }} records from a focused control surface.</p>
+    </div>
+    <a class="primary-button" href="{% url 'entity_create' entity %}">Create Record</a>
+</section>
+
+<section class="panel list-panel">
+    <div class="panel-heading">
+        <form class="search-form" method="get">
+            <input type="search" name="q" value="{{ query }}" placeholder="Search {{ config.title|lower }}">
+            <button type="submit">Search</button>
+        </form>
+        <span class="result-pill">{{ page.paginator.count }} records</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    {% for field in config.fields %}
+                        <th>{{ field|title }}</th>
+                    {% endfor %}
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for field, value in row.values %}
+                            <td>{{ value|default:"-" }}</td>
+                        {% endfor %}
+                        <td class="actions">
+                            {% if entity == 'projects' %}
+                                <a href="{{ row.object.get_absolute_url }}">Open</a>
+                            {% endif %}
+                            <a href="{% url 'entity_update' entity row.object.pk %}">Edit</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="{{ config.fields|length|add:1 }}" class="empty">No records found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if page.has_other_pages %}
+        <div class="pagination">
+            {% if page.has_previous %}<a href="?page={{ page.previous_page_number }}&q={{ query }}">Previous</a>{% endif %}
+            <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+            {% if page.has_next %}<a href="?page={{ page.next_page_number }}&q={{ query }}">Next</a>{% endif %}
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
