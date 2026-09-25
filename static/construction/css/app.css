@@ -130,18 +130,15 @@ textarea {
     font-weight: 700;
 }
 
-.brand-mark {
-    display: inline-grid;
-    place-items: center;
+.brand-logo {
+    display: block;
     flex: 0 0 auto;
-    width: 46px;
-    height: 46px;
+    width: 52px;
+    height: 52px;
     border-radius: var(--radius);
-    color: #142024;
-    background: linear-gradient(135deg, #f4cb64, var(--gold));
+    background: #fff;
     box-shadow: 0 12px 26px rgba(209, 154, 42, .28);
-    font-family: var(--font-display);
-    font-weight: 950;
+    object-fit: contain;
 }
 
 .sidebar nav {
