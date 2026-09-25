@@ -1,0 +1,65 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | Construction Management</title>
+    <link rel="stylesheet" href="{% static 'construction/css/app.css' %}">
+</head>
+<body class="login-page">
+    <section class="login-shell app-style-login">
+        <div class="login-showcase dashboard-style-showcase">
+            <a class="login-brand" href="{% url 'login' %}">
+                <span class="brand-mark">CM</span>
+                <span>
+                    ConstructPro
+                    <small>Control Center</small>
+                </span>
+            </a>
+            <div class="login-copy">
+                <p class="eyebrow">Construction Project Management System</p>
+                <h1>Portfolio dashboard for cost, schedule, and site control.</h1>
+                <p>Sign in to open the same command center used for projects, BOQs, budgets, RFIs, documents, procurement, defects, and approvals.</p>
+            </div>
+            <div class="login-metrics">
+                <div><strong>360</strong><span>Project view</span></div>
+                <div><strong>30+</strong><span>Core modules</span></div>
+                <div><strong>24/7</strong><span>Site records</span></div>
+            </div>
+            <div class="login-feature-list">
+                <span>Budget vs actual analytics</span>
+                <span>Approval workflows</span>
+                <span>Document version control</span>
+            </div>
+        </div>
+        <div class="login-card">
+            <div class="login-card-head">
+                <p class="eyebrow">Welcome back</p>
+                <h2>Sign in to ConstructPro</h2>
+                <p>Use your assigned role to continue into the dashboard.</p>
+            </div>
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="login-error">{{ form.non_field_errors }}</div>
+                {% endif %}
+                <label>
+                    <span>Username</span>
+                    {{ form.username }}
+                </label>
+                <label>
+                    <span>Password</span>
+                    {{ form.password }}
+                </label>
+                <button class="primary-button login-submit" type="submit">Sign in</button>
+            </form>
+            <div class="demo-login">
+                <p>Demo accounts</p>
+                <div><span>Admin</span><code>admin / admin123</code></div>
+                <div><span>Project Manager</span><code>pm / pm123</code></div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
