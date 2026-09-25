@@ -5,13 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login | Construction Management</title>
+    <link rel="icon" type="image/png" href="{% static 'construction/img/construct-logo.png' %}">
     <link rel="stylesheet" href="{% static 'construction/css/app.css' %}">
 </head>
 <body class="login-page">
     <section class="login-shell app-style-login">
         <div class="login-showcase dashboard-style-showcase">
             <a class="login-brand" href="{% url 'login' %}">
-                <span class="brand-mark">CM</span>
+                <img class="brand-logo" src="{% static 'construction/img/construct-logo.png' %}" alt="Construct logo">
                 <span>
                     ConstructPro
                     <small>Control Center</small>
