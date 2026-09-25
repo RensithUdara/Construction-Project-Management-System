@@ -18,29 +18,22 @@
         </a>
         <nav>
             <a href="{% url 'dashboard' %}"><span>Dashboard</span></a>
-            <p>Project Control</p>
-            <a href="{% url 'entity_list' 'projects' %}"><span>Projects</span></a>
-            <a href="{% url 'entity_list' 'activities' %}"><span>Schedule</span></a>
-            <a href="{% url 'entity_list' 'daily-reports' %}"><span>Daily Reports</span></a>
-            <a href="{% url 'entity_list' 'tasks' %}"><span>Tasks</span></a>
-            <p>Commercial</p>
-            <a href="{% url 'entity_list' 'boq-items' %}"><span>BOQ</span></a>
-            <a href="{% url 'entity_list' 'budgets' %}"><span>Budgets</span></a>
-            <a href="{% url 'entity_list' 'variations' %}"><span>Variations</span></a>
-            <a href="{% url 'entity_list' 'payments' %}"><span>Payments</span></a>
-            <p>Operations</p>
-            <a href="{% url 'entity_list' 'purchase-requests' %}"><span>Procurement</span></a>
-            <a href="{% url 'entity_list' 'materials' %}"><span>Materials</span></a>
-            <a href="{% url 'entity_list' 'documents' %}"><span>Documents</span></a>
-            <a href="{% url 'entity_list' 'rfis' %}"><span>RFIs</span></a>
-            <a href="{% url 'entity_list' 'risks' %}"><span>Risk & Safety</span></a>
-            <p>System</p>
-            <a href="/api/"><span>API</span></a>
-            <a href="/admin/"><span>Admin</span></a>
+            {% for group in sidebar_groups %}
+                <p>{{ group.title }}</p>
+                {% for link in group.links %}
+                    <a href="{% url 'entity_list' link.entity %}"><span>{{ link.label }}</span></a>
+                {% endfor %}
+            {% endfor %}
+            {% if is_system_admin %}
+                <p>System</p>
+                <a href="/api/"><span>API</span></a>
+                <a href="/admin/"><span>Admin</span></a>
+            {% endif %}
         </nav>
         {% if user.is_authenticated %}
             <div class="sidebar-account">
                 <span class="user-pill">{{ user.get_full_name|default:user.username }}</span>
+                <span class="role-pill">{{ current_role_label }}</span>
                 <form method="post" action="{% url 'logout' %}" data-dialog-preset="logout">
                     {% csrf_token %}
                     <button type="submit">Logout</button>
