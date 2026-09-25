@@ -211,6 +211,21 @@ textarea {
     text-align: center;
 }
 
+.role-pill {
+    display: inline-flex;
+    justify-content: center;
+    min-height: 30px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 999px;
+    color: rgba(234,244,242,.78);
+    background: rgba(255,255,255,.07);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 850;
+    text-align: center;
+}
+
 .sidebar-account form {
     margin: 0;
 }
@@ -561,6 +576,14 @@ button:hover,
     margin-bottom: 18px;
 }
 
+.panel-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .project-list,
 .stack-list {
     display: grid;
@@ -711,6 +734,22 @@ button:hover,
 
 .module-grid small {
     color: var(--muted);
+}
+
+.compact-module-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.search-groups {
+    display: grid;
+    gap: 18px;
+}
+
+.search-group {
+    padding: 16px;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    background: var(--panel-soft);
 }
 
 .table-wrap {
@@ -1576,6 +1615,7 @@ progress::-webkit-progress-value {
     }
 
     .search-form,
+    .panel-actions,
     .hero-actions,
     .page-hero,
     .form-actions,
@@ -1634,6 +1674,10 @@ progress::-webkit-progress-value {
 
     table {
         min-width: 640px;
+    }
+
+    .compact-module-grid {
+        grid-template-columns: 1fr;
     }
 }
 
