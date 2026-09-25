@@ -1,15 +1,19 @@
+import csv
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.db.models import Count, Q, Sum
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from rest_framework import permissions, viewsets
 from rest_framework.routers import DefaultRouter
 
 from . import models
 from .forms import FORM_MODELS, get_entity_form
+from .permissions import can_change, can_export, can_view
 from .serializers import serializer_for
 
 
@@ -56,6 +60,32 @@ def _display_value(obj, field_name):
     return value
 
 
+def _text_search_fields(model):
+    return [
+        field.name
+        for field in model._meta.fields
+        if field.get_internal_type() in {'CharField', 'TextField', 'EmailField'}
+    ]
+
+
+def _query_text_fields(model, query):
+    search_query = Q()
+    for field in _text_search_fields(model):
+        search_query |= Q(**{f'{field}__icontains': query})
+    return search_query
+
+
+def _export_csv(qs, config):
+    response = HttpResponse(content_type='text/csv')
+    filename = config['title'].lower().replace(' ', '-')
+    response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
+    writer = csv.writer(response)
+    writer.writerow([field.replace('_', ' ').title() for field in config['fields']])
+    for obj in qs:
+        writer.writerow([_display_value(obj, field) for field in config['fields']])
+    return response
+
+
 @login_required
 def dashboard(request):
     projects = models.Project.objects.select_related('company').all()
@@ -97,6 +127,11 @@ def dashboard(request):
         'recent_projects': projects[:6],
         'risk_counts': models.Risk.objects.values('status').annotate(total=Count('id')),
         'module_links': ENTITY_CONFIG,
+        'visible_module_links': {key: value for key, value in ENTITY_CONFIG.items() if can_view(request.user, key)},
+        'can_create_projects': can_change(request.user, 'projects'),
+        'can_create_daily_reports': can_change(request.user, 'daily-reports'),
+        'can_create_rfis': can_change(request.user, 'rfis'),
+        'recent_audits': models.AuditLog.objects.select_related('user')[:8],
         'overdue_tasks': overdue_tasks.select_related('project', 'assignee')[:6],
         'overdue_rfis': overdue_rfis.select_related('project')[:6],
         'dashboard_charts': {
@@ -123,16 +158,18 @@ def dashboard(request):
 @login_required
 def entity_list(request, entity):
     model, config = _entity_or_404(entity)
+    if not can_view(request.user, entity):
+        raise PermissionDenied
     qs = model.objects.all()
     query = request.GET.get('q', '').strip()
     if query:
-        text_fields = [field.name for field in model._meta.fields if field.get_internal_type() in {'CharField', 'TextField', 'EmailField'}]
-        search_query = Q()
-        for field in text_fields:
-            search_query |= Q(**{f'{field}__icontains': query})
-        qs = qs.filter(search_query)
+        qs = qs.filter(_query_text_fields(model, query))
     if not qs.query.order_by and not model._meta.ordering:
         qs = qs.order_by('-pk')
+    if request.GET.get('export') == 'csv':
+        if not can_export(request.user, entity):
+            raise PermissionDenied
+        return _export_csv(qs, config)
     paginator = Paginator(qs, 20)
     page = paginator.get_page(request.GET.get('page'))
     rows = [
@@ -145,12 +182,17 @@ def entity_list(request, entity):
         'page': page,
         'rows': rows,
         'query': query,
+        'can_create': can_change(request.user, entity),
+        'can_edit': can_change(request.user, entity),
+        'can_export': can_export(request.user, entity),
     })
 
 
 @login_required
 def entity_create(request, entity):
     _model, config = _entity_or_404(entity)
+    if not can_change(request.user, entity):
+        raise PermissionDenied
     form_class = get_entity_form(entity)
     form = form_class(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -165,6 +207,8 @@ def entity_create(request, entity):
 @login_required
 def entity_update(request, entity, pk):
     model, config = _entity_or_404(entity)
+    if not can_change(request.user, entity):
+        raise PermissionDenied
     obj = get_object_or_404(model, pk=pk)
     form_class = get_entity_form(entity)
     form = form_class(request.POST or None, request.FILES or None, instance=obj)
@@ -179,6 +223,8 @@ def entity_update(request, entity, pk):
 
 @login_required
 def project_detail(request, pk):
+    if not can_view(request.user, 'projects'):
+        raise PermissionDenied
     project = get_object_or_404(models.Project.objects.select_related('company', 'client', 'consultant', 'contractor'), pk=pk)
     context = {
         'project': project,
@@ -190,6 +236,7 @@ def project_detail(request, pk):
         'tasks': project.tasks.all()[:8],
         'risks': project.risks.all()[:8],
         'defects': project.defects.all()[:8],
+        'can_edit_project': can_change(request.user, 'projects'),
     }
     return render(request, 'construction/project_detail.html', context)
 
