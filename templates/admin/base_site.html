@@ -1,0 +1,41 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Construct Administration{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    #site-name .construct-admin-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: inherit;
+        font-weight: 700;
+    }
+
+    .construct-admin-logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 6px;
+        background: #fff;
+        object-fit: contain;
+    }
+</style>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="icon" type="image/png" href="{% static 'construction/img/construct-logo.png' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a class="construct-admin-brand" href="{% url 'admin:index' %}">
+        <img class="construct-admin-logo" src="{% static 'construction/img/construct-logo.png' %}" alt="Construct logo">
+        <span>Construct Administration</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
