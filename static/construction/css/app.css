@@ -505,6 +505,16 @@ button:hover,
     min-height: 180px;
 }
 
+.collection-panel {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+}
+
+.compact-heading {
+    margin-bottom: 4px;
+}
+
 .panel-heading {
     display: flex;
     align-items: center;
@@ -1469,6 +1479,7 @@ progress::-webkit-progress-value {
     .split,
     .project-hero,
     .module-columns,
+    .page-hero,
     .hero-dashboard {
         grid-template-columns: 1fr;
     }
@@ -1526,6 +1537,7 @@ progress::-webkit-progress-value {
 
     .search-form,
     .hero-actions,
+    .page-hero,
     .form-actions,
     .dialog-actions {
         flex-direction: column;
