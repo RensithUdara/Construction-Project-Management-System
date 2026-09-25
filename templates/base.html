@@ -1,0 +1,86 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Construction Management{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'construction/css/app.css' %}">
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="{% url 'dashboard' %}">
+            <span class="brand-mark">CM</span>
+            <span>
+                ConstructPro
+                <small>Control Center</small>
+            </span>
+        </a>
+        <nav>
+            <a href="{% url 'dashboard' %}"><span>Dashboard</span></a>
+            <p>Project Control</p>
+            <a href="{% url 'entity_list' 'projects' %}"><span>Projects</span></a>
+            <a href="{% url 'entity_list' 'activities' %}"><span>Schedule</span></a>
+            <a href="{% url 'entity_list' 'daily-reports' %}"><span>Daily Reports</span></a>
+            <a href="{% url 'entity_list' 'tasks' %}"><span>Tasks</span></a>
+            <p>Commercial</p>
+            <a href="{% url 'entity_list' 'boq-items' %}"><span>BOQ</span></a>
+            <a href="{% url 'entity_list' 'budgets' %}"><span>Budgets</span></a>
+            <a href="{% url 'entity_list' 'variations' %}"><span>Variations</span></a>
+            <a href="{% url 'entity_list' 'payments' %}"><span>Payments</span></a>
+            <p>Operations</p>
+            <a href="{% url 'entity_list' 'purchase-requests' %}"><span>Procurement</span></a>
+            <a href="{% url 'entity_list' 'materials' %}"><span>Materials</span></a>
+            <a href="{% url 'entity_list' 'documents' %}"><span>Documents</span></a>
+            <a href="{% url 'entity_list' 'rfis' %}"><span>RFIs</span></a>
+            <a href="{% url 'entity_list' 'risks' %}"><span>Risk & Safety</span></a>
+            <p>System</p>
+            <a href="/api/"><span>API</span></a>
+            <a href="/admin/"><span>Admin</span></a>
+        </nav>
+    </aside>
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Construction Project Management System</p>
+                <h1>{% block heading %}Dashboard{% endblock %}</h1>
+            </div>
+            <div class="user-menu">
+                {% if user.is_authenticated %}
+                    <span class="user-pill">{{ user.get_full_name|default:user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}" data-dialog-preset="logout">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                {% endif %}
+            </div>
+        </header>
+        {% if messages %}
+            <div class="messages popup-message-source">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}" data-popup-message="{{ message }}" data-popup-type="{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+    <div class="dialog-backdrop" id="dialogBackdrop" hidden>
+        <section class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogDetail">
+            <button class="dialog-close" type="button" data-dialog-cancel aria-label="Close dialog">x</button>
+            <div class="dialog-icon" id="dialogIcon">!</div>
+            <div>
+                <p class="eyebrow" id="dialogEyebrow">Confirm Action</p>
+                <h2 id="dialogTitle">Are you sure?</h2>
+                <p id="dialogDetail">Please confirm before continuing.</p>
+            </div>
+            <div class="dialog-actions">
+                <button class="button secondary" type="button" data-dialog-cancel>Cancel</button>
+                <button class="primary-button" type="button" id="dialogConfirmButton">Continue</button>
+            </div>
+        </section>
+    </div>
+    <script src="{% static 'construction/js/dialogs.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
