@@ -26,7 +26,7 @@ class ConstructionSmokeTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.client.login(username='tester', password='pass12345')
         response = self.client.get(reverse('dashboard'))
-        self.assertContains(response, 'Portfolio Dashboard')
+        self.assertContains(response, 'Live project intelligence')
 
     def test_project_calculates_budget_and_progress(self):
         models.BudgetItem.objects.create(
