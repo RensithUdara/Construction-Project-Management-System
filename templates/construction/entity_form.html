@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} {{ config.title }} | Construction Management{% endblock %}
+{% block heading %}{{ mode }} {{ config.title }}{% endblock %}
+{% block content %}
+<section class="page-hero compact-hero">
+    <div>
+        <p class="eyebrow">Record Editor</p>
+        <h2>{{ mode }} {{ config.title }}</h2>
+        <p>Complete the fields below and save the record into the construction management database.</p>
+    </div>
+</section>
+
+<section class="panel narrow form-panel">
+    <form method="post" enctype="multipart/form-data" class="record-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <label>
+                <span>{{ field.label }}</span>
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {{ field.errors }}
+            </label>
+        {% endfor %}
+        <div class="form-actions">
+            <a class="button secondary" href="{% url 'entity_list' entity %}" data-dialog-link data-dialog-preset="discard">Cancel</a>
+            <button class="primary-button" type="submit">Save Record</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
