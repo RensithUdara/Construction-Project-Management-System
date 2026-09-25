@@ -88,6 +88,8 @@ textarea {
     position: fixed;
     inset: 0 auto 0 0;
     width: 292px;
+    display: flex;
+    flex-direction: column;
     padding: 22px 16px;
     color: #eef8f6;
     background:
@@ -145,6 +147,7 @@ textarea {
 .sidebar nav {
     display: grid;
     gap: 5px;
+    flex: 1;
 }
 
 .sidebar nav p {
@@ -191,6 +194,29 @@ textarea {
 .sidebar nav a:hover::before {
     background: var(--gold);
     transform: scale(1.25);
+}
+
+.sidebar-account {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    background: rgba(255,255,255,.08);
+}
+
+.sidebar-account .user-pill {
+    max-width: 100%;
+    text-align: center;
+}
+
+.sidebar-account form {
+    margin: 0;
+}
+
+.sidebar-account button {
+    width: 100%;
 }
 
 .main {
@@ -1487,12 +1513,6 @@ progress::-webkit-progress-value {
 
     .main {
         margin-left: 0;
-        padding: 20px;
-    }
-
-    .topbar {
-        position: static;
-        margin: -20px -20px 20px;
         padding: 20px;
     }
 
