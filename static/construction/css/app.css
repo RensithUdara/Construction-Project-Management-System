@@ -1139,9 +1139,8 @@ progress::-webkit-progress-value {
     padding: 28px;
     overflow: hidden;
     background:
-        radial-gradient(circle at 12% 18%, rgba(209, 154, 42, .28), transparent 26%),
-        radial-gradient(circle at 88% 12%, rgba(61, 111, 182, .28), transparent 28%),
-        linear-gradient(135deg, #10282e 0%, #17353c 48%, #0e2028 100%);
+        linear-gradient(135deg, rgba(23, 114, 100, .76), rgba(61, 111, 182, .24) 42%, rgba(209, 154, 42, .16)),
+        linear-gradient(180deg, #10282e 0%, #17353c 48%, #0e2028 100%);
 }
 
 .app-style-login {
@@ -1175,9 +1174,9 @@ progress::-webkit-progress-value {
     height: 720px;
     right: -260px;
     bottom: -360px;
-    border-radius: 999px;
     border: 1px solid rgba(255,255,255,.10);
     background: rgba(255,255,255,.035);
+    transform: rotate(12deg);
 }
 
 .login-shell {
@@ -1216,8 +1215,8 @@ progress::-webkit-progress-value {
     inset: auto -80px -100px auto;
     width: 340px;
     height: 340px;
-    border-radius: 999px;
     background: rgba(209, 154, 42, .18);
+    transform: rotate(18deg);
 }
 
 .login-brand {
