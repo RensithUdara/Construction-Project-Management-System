@@ -10,9 +10,9 @@
         <p>Track portfolio health, catch overdue actions, and jump into the modules that need attention.</p>
     </div>
     <div class="hero-actions">
-        <a class="primary-button" href="{% url 'entity_create' 'projects' %}">New Project</a>
-        <a class="button secondary" href="{% url 'entity_create' 'daily-reports' %}">Daily Report</a>
-        <a class="button secondary" href="{% url 'entity_create' 'rfis' %}">New RFI</a>
+        {% if can_create_projects %}<a class="primary-button" href="{% url 'entity_create' 'projects' %}">New Project</a>{% endif %}
+        {% if can_create_daily_reports %}<a class="button secondary" href="{% url 'entity_create' 'daily-reports' %}">Daily Report</a>{% endif %}
+        {% if can_create_rfis %}<a class="button secondary" href="{% url 'entity_create' 'rfis' %}">New RFI</a>{% endif %}
     </div>
 </section>
 
@@ -71,7 +71,7 @@
                 <p class="eyebrow">Portfolio</p>
                 <h2>Projects</h2>
             </div>
-            <a class="button" href="{% url 'entity_create' 'projects' %}">New Project</a>
+            {% if can_create_projects %}<a class="button" href="{% url 'entity_create' 'projects' %}">New Project</a>{% endif %}
         </div>
         <div class="project-list">
             {% for project in recent_projects %}
@@ -144,6 +144,46 @@
     </div>
 </section>
 
+<section class="split">
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Governance</p>
+                <h2>Recent Audit Activity</h2>
+            </div>
+            <a class="button secondary" href="{% url 'entity_list' 'approvals' %}">Approvals</a>
+        </div>
+        <div class="stack-list">
+            {% for audit in recent_audits %}
+                <div class="work-row">
+                    <span>
+                        <strong>{{ audit.model_name }} {{ audit.action|title }}</strong>
+                        <small>{{ audit.summary }}</small>
+                    </span>
+                    <span class="status-chip">{{ audit.created_at|date:"M d, H:i" }}</span>
+                </div>
+            {% empty %}
+                <p class="empty">No audit activity yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Django Features</p>
+                <h2>Learning Hooks</h2>
+            </div>
+        </div>
+        <div class="module-grid compact-module-grid">
+            <a href="{% url 'entity_list' 'projects' %}?export=csv"><strong>CSV Export</strong><small>Streaming HttpResponse</small></a>
+            {% if is_system_admin %}
+                <a href="/api/"><strong>REST API</strong><small>DRF viewsets</small></a>
+                <a href="/admin/"><strong>Admin</strong><small>Django admin models</small></a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
 <section class="panel">
     <div class="panel-heading">
         <div>
@@ -152,7 +192,7 @@
         </div>
     </div>
     <div class="module-grid">
-        {% for key, module in module_links.items %}
+        {% for key, module in visible_module_links.items %}
             <a href="{% url 'entity_list' key %}">
                 <strong>{{ module.title }}</strong>
                 <small>Open records</small>
