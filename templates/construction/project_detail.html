@@ -9,7 +9,9 @@
         <p>{{ project.description|default:"No description added." }}</p>
         <div class="hero-actions">
             <a class="button secondary" href="{% url 'entity_list' 'projects' %}">All Projects</a>
-            <a class="primary-button" href="{% url 'entity_update' 'projects' project.pk %}">Edit Project</a>
+            {% if can_edit_project %}
+                <a class="primary-button" href="{% url 'entity_update' 'projects' project.pk %}">Edit Project</a>
+            {% endif %}
         </div>
     </div>
     <dl>
