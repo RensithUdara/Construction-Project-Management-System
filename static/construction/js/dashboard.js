@@ -20,7 +20,7 @@
         const ctx = canvas.getContext('2d');
         ctx.scale(dpr, dpr);
         ctx.clearRect(0, 0, rect.width, rect.height);
-        ctx.font = '12px Arial, Helvetica, sans-serif';
+        ctx.font = '12px "Plus Jakarta Sans", system-ui, sans-serif';
         ctx.lineWidth = 1;
         return { ctx, width: rect.width, height: rect.height };
     }
@@ -117,10 +117,10 @@
         ctx.fill();
         ctx.fillStyle = '#18202a';
         ctx.textAlign = 'center';
-        ctx.font = '700 24px Arial, Helvetica, sans-serif';
+        ctx.font = '700 24px "Space Grotesk", system-ui, sans-serif';
         ctx.fillText(total, cx, cy + 8);
 
-        ctx.font = '12px Arial, Helvetica, sans-serif';
+        ctx.font = '12px "Plus Jakarta Sans", system-ui, sans-serif';
         labels.forEach((label, index) => {
             const x = 18 + (index % 2) * (width / 2);
             const y = height - 52 + Math.floor(index / 2) * 18;
