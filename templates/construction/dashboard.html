@@ -7,7 +7,7 @@
     <div>
         <p class="eyebrow">Live project intelligence</p>
         <h2>Cost, schedule, procurement, and contract administration in one workspace.</h2>
-        <p>Track the portfolio health, catch overdue actions, and jump into the modules that need attention.</p>
+        <p>Track portfolio health, catch overdue actions, and jump into the modules that need attention.</p>
     </div>
     <div class="hero-actions">
         <a class="primary-button" href="{% url 'entity_create' 'projects' %}">New Project</a>
@@ -115,7 +115,7 @@
         <div class="stack-list">
             {% for task in overdue_tasks %}
                 <div class="work-row">
-                    <span><strong>{{ task.title }}</strong><small>{{ task.project.code }} · {{ task.assignee|default:"Unassigned" }}</small></span>
+                    <span><strong>{{ task.title }}</strong><small>{{ task.project.code }} / {{ task.assignee|default:"Unassigned" }}</small></span>
                     <span class="danger-chip">{{ task.due_date }}</span>
                 </div>
             {% empty %}
@@ -134,7 +134,7 @@
         <div class="stack-list">
             {% for rfi in overdue_rfis %}
                 <div class="work-row">
-                    <span><strong>{{ rfi.rfi_number }}</strong><small>{{ rfi.project.code }} · {{ rfi.subject }}</small></span>
+                    <span><strong>{{ rfi.rfi_number }}</strong><small>{{ rfi.project.code }} / {{ rfi.subject }}</small></span>
                     <span class="danger-chip">{{ rfi.due_date }}</span>
                 </div>
             {% empty %}
