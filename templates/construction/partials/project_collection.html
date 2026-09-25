@@ -1,9 +1,14 @@
-<div class="panel compact">
-    <h2>{{ title }}</h2>
+<div class="panel compact collection-panel">
+    <div class="panel-heading compact-heading">
+        <div>
+            <p class="eyebrow">Project Records</p>
+            <h2>{{ title }}</h2>
+        </div>
+    </div>
     {% for item in items %}
         <div class="mini-row">
             <strong>{{ item }}</strong>
-            {% if item.status %}<span>{{ item.get_status_display }}</span>{% endif %}
+            {% if item.status %}<span class="status-chip">{{ item.get_status_display }}</span>{% endif %}
         </div>
     {% empty %}
         <p class="empty">No records.</p>
