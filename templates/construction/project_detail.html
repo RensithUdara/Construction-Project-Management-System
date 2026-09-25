@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ project.code }} | Construction Management{% endblock %}
+{% block heading %}{{ project.name }}{% endblock %}
+{% block content %}
+<section class="project-hero">
+    <div>
+        <p class="eyebrow">{{ project.code }} / {{ project.get_project_type_display }}</p>
+        <h2>{{ project.get_status_display }}</h2>
+        <p>{{ project.description|default:"No description added." }}</p>
+        <div class="hero-actions">
+            <a class="button secondary" href="{% url 'entity_list' 'projects' %}">All Projects</a>
+            <a class="primary-button" href="{% url 'entity_update' 'projects' project.pk %}">Edit Project</a>
+        </div>
+    </div>
+    <dl>
+        <div><dt>Contract Value</dt><dd>{{ project.contract_value|floatformat:2 }}</dd></div>
+        <div><dt>Progress</dt><dd>{{ project.progress_percent }}%</dd></div>
+        <div><dt>Budget</dt><dd>{{ project.budget_total|floatformat:2 }}</dd></div>
+        <div><dt>Actual</dt><dd>{{ project.actual_total|floatformat:2 }}</dd></div>
+    </dl>
+</section>
+
+<section class="split">
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Commercial</p>
+                <h2>Budget vs Actual</h2>
+            </div>
+        </div>
+        <div class="table-wrap embedded-table">
+            <table>
+                <thead><tr><th>Category</th><th>Budget</th><th>Actual</th><th>Variance</th></tr></thead>
+                <tbody>
+                    {% for item in budget_items %}
+                        <tr><td>{{ item.get_category_display }}</td><td>{{ item.current_budget }}</td><td>{{ item.actual_cost }}</td><td>{{ item.variance }}</td></tr>
+                    {% empty %}
+                        <tr><td colspan="4" class="empty">No budget items.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Schedule</p>
+                <h2>Activity Progress</h2>
+            </div>
+        </div>
+        {% for activity in activities %}
+            <div class="activity">
+                <span>{{ activity.code }} / {{ activity.name }}</span>
+                <progress max="100" value="{{ activity.progress }}"></progress>
+                <small>{{ activity.progress }}% / {{ activity.get_status_display }}</small>
+            </div>
+        {% empty %}
+            <p class="empty">No activities.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="module-columns">
+    {% include "construction/partials/project_collection.html" with title="RFIs" items=rfis fields="rfi_number,subject,status" %}
+    {% include "construction/partials/project_collection.html" with title="Variations" items=variations fields="variation_number,description,status" %}
+    {% include "construction/partials/project_collection.html" with title="Documents" items=documents fields="title,version,status" %}
+    {% include "construction/partials/project_collection.html" with title="Tasks" items=tasks fields="title,assignee,status" %}
+    {% include "construction/partials/project_collection.html" with title="Risks" items=risks fields="title,probability,status" %}
+    {% include "construction/partials/project_collection.html" with title="Defects" items=defects fields="defect_number,location,status" %}
+</section>
+{% endblock %}
